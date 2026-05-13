@@ -3,6 +3,8 @@ import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { logger } from './utils/logger';
+import { vaultRoutes } from './api/routes/vaults';
+import { positionRoutes } from './api/routes/positions';
 
 export async function createServer() {
   const fastify = Fastify({
@@ -25,8 +27,8 @@ export async function createServer() {
   });
 
   // Register routes
-  // fastify.register(vaultRoutes, { prefix: '/v1/vaults' });
-  // fastify.register(positionRoutes, { prefix: '/v1/positions' });
+  await fastify.register(vaultRoutes, { prefix: '/v1/vaults' });
+  await fastify.register(positionRoutes, { prefix: '/v1/positions' });
 
   fastify.get('/health', async () => {
     return { status: 'ok' };
