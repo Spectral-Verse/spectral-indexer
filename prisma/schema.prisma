@@ -1,0 +1,118 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model SyncState {
+  id             String   @id @default(uuid())
+  network        String
+  contractId     String
+  lastLedger     Int      @default(0)
+  updatedAt      DateTime @updatedAt
+
+  @@unique([network, contractId])
+}
+
+model RawEvent {
+  id              String   @id @default(uuid())
+  network         String
+  contractId      String
+  ledger          Int
+  txHash          String
+  eventBodyXdr    String
+  createdAt       DateTime @default(now())
+
+  @@index([network, contractId, ledger])
+}
+
+model Vault {
+  id                    String   @id // Vault ID from contract
+  contractId            String
+  network               String
+  name                  String
+  manager               String
+  rebalanceAuthority    String
+  baseAsset             String
+  metadataHash          String
+  managementFeeBps      Int
+  depositStatus         String
+  withdrawalStatus      String
+  totalShares           String   // Stored as string to handle large integers
+  createdLedger         Int
+  createdTxHash         String
+  lastUpdatedLedger     Int
+  updatedAt             DateTime @updatedAt
+
+  allocations           AllocationTarget[]
+  positions             Position[]
+  balances              VaultBalance[]
+  rebalances            RebalanceRecord[]
+  fees                  FeeRecord[]
+
+  @@index([network, manager])
+}
+
+model AllocationTarget {
+  id         String @id @default(uuid())
+  vaultId    String
+  asset      String
+  targetBps  Int
+  vault      Vault  @relation(fields: [vaultId], references: [id])
+
+  @@unique([vaultId, asset])
+}
+
+model Position {
+  id               String   @id @default(uuid())
+  vaultId          String
+  account          String
+  shares           String
+  depositedAmount  String
+  withdrawnAmount  String
+  lastActivityAt   DateTime
+  vault            Vault    @relation(fields: [vaultId], references: [id])
+
+  @@unique([vaultId, account])
+}
+
+model VaultBalance {
+  id        String @id @default(uuid())
+  vaultId   String
+  asset     String
+  balance   String
+  vault     Vault  @relation(fields: [vaultId], references: [id])
+
+  @@unique([vaultId, asset])
+}
+
+model RebalanceRecord {
+  id                  String   @id @default(uuid())
+  vaultId             String
+  rebalanceAuthority  String
+  oldAllocationHash   String
+  newAllocationHash   String
+  ledger              Int
+  txHash              String
+  timestamp           DateTime
+  vault               Vault    @relation(fields: [vaultId], references: [id])
+
+  @@index([vaultId, timestamp])
+}
+
+model FeeRecord {
+  id        String   @id @default(uuid())
+  vaultId   String
+  asset     String
+  amount    String
+  type      String   // ACCRUED or CLAIMED
+  ledger    Int
+  txHash    String
+  timestamp DateTime
+  vault     Vault    @relation(fields: [vaultId], references: [id])
+
+  @@index([vaultId, asset])
+}
