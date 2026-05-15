@@ -7,84 +7,124 @@ generator client {
   provider = "prisma-client-js"
 }
 
+/// Tracks the indexing progress for a specific contract on a network.
 model SyncState {
   id             String   @id @default(uuid())
+  /// The Stellar network (e.g., "testnet", "mainnet").
   network        String
+  /// The address of the Soroban contract being indexed.
   contractId     String
+  /// The sequence number of the last ledger successfully processed.
   lastLedger     Int      @default(0)
   updatedAt      DateTime @updatedAt
 
   @@unique([network, contractId])
 }
 
+/// Stores raw contract events for auditability and replay support.
 model RawEvent {
   id              String   @id @default(uuid())
   network         String
   contractId      String
+  /// Ledger sequence where the event occurred.
   ledger          Int
+  /// Transaction hash that emitted the event.
   txHash          String
+  /// The full XDR-encoded body of the event.
   eventBodyXdr    String
   createdAt       DateTime @default(now())
 
   @@index([network, contractId, ledger])
 }
 
+/// Derived state representing a Spectra Vault and its current settings.
 model Vault {
-  id                    String   @id // Vault ID from contract
+  /// The unique 32-byte hexadecimal ID of the vault from the contract.
+  id                    String   @id
+  /// The address of the vault contract.
   contractId            String
   network               String
+  /// Human-readable name (fetched from metadata events).
   name                  String
+  /// Address of the manager with administrative control.
   manager               String
+  /// Address permitted to update allocations.
   rebalanceAuthority    String
+  /// The primary asset used for internal valuation.
   baseAsset             String
+  /// Hash of the off-chain strategy documentation.
   metadataHash          String
+  /// Fee in basis points (100 = 1%).
   managementFeeBps      Int
+  /// Operational status for deposits ("Active" or "Paused").
   depositStatus         String
+  /// Operational status for withdrawals ("Active" or "Paused").
   withdrawalStatus      String
-  totalShares           String   // Stored as string to handle large integers
+  /// Current total number of shares issued (BigInt as string).
+  totalShares           String
+  /// Ledger sequence where the vault was created.
   createdLedger         Int
+  /// Transaction hash that created the vault.
   createdTxHash         String
+  /// Ledger sequence of the most recent update.
   lastUpdatedLedger     Int
   updatedAt             DateTime @updatedAt
 
+  /// The target asset weights for this vault's basket.
   allocations           AllocationTarget[]
+  /// Shareholder positions in this vault.
   positions             Position[]
+  /// Current balances of each asset held by the vault.
   balances              VaultBalance[]
+  /// History of rebalancing events.
   rebalances            RebalanceRecord[]
+  /// Records of management fee claims.
   fees                  FeeRecord[]
 
   @@index([network, manager])
 }
 
+/// A target weight for a specific asset within a vault's basket.
 model AllocationTarget {
   id         String @id @default(uuid())
   vaultId    String
+  /// Address of the Stellar asset.
   asset      String
+  /// Target weight in basis points (0-10,000).
   targetBps  Int
   vault      Vault  @relation(fields: [vaultId], references: [id])
 
   @@unique([vaultId, asset])
 }
 
+/// A shareholder's position in a specific vault.
 model Position {
   id               String   @id @default(uuid())
   vaultId          String
+  /// The Stellar public key of the shareholder.
   account          String
+  /// Number of shares owned (BigInt as string).
   shares           String
+  /// Historical total amount deposited by this user (BigInt as string).
   depositedAmount  String
+  /// Historical total amount withdrawn by this user (BigInt as string).
   withdrawnAmount  String
+  /// Timestamp of the most recent deposit or withdrawal.
   lastActivityAt   DateTime
   vault            Vault    @relation(fields: [vaultId], references: [id])
 
   @@unique([vaultId, account])
 }
 
+/// The current balance of an asset held by a vault.
 model VaultBalance {
   id        String @id @default(uuid())
   vaultId   String
-  asset     String
-  balance   String
-  vault     Vault  @relation(fields: [vaultId], references: [id])
+  /// Address of the Stellar asset.
+  asset      String
+  /// Current amount held in the contract (BigInt as string).
+  amount     String
+  vault      Vault  @relation(fields: [vaultId], references: [id])
 
   @@unique([vaultId, asset])
 }
