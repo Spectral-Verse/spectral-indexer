@@ -15,8 +15,8 @@ export async function createServer() {
   await fastify.register(swagger, {
     openapi: {
       info: {
-        title: 'Spectra Indexer API',
-        description: 'API for querying indexed Spectra vault data',
+        title: 'Spectral Indexer API',
+        description: 'API for querying indexed Spectral Verse vault data',
         version: '0.1.0',
       },
     },

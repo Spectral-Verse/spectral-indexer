@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { parseSpectraEvent } from '../src/parsers/spectraEvents';
+import { parseSpectralEvent } from '../src/parsers/spectralEvents';
 import { xdr, nativeToScVal } from '@stellar/stellar-sdk';
 
-describe('Spectra Event Parser', () => {
+describe('Spectral Event Parser', () => {
   it('should parse a vault created event', () => {
     const vaultId = '0'.repeat(64);
     const event = {
@@ -18,7 +18,7 @@ describe('Spectra Event Parser', () => {
       value: nativeToScVal('manager_address').toXDR('base64'),
     };
 
-    const parsed = parseSpectraEvent(event);
+    const parsed = parseSpectralEvent(event);
     expect(parsed).toBeDefined();
     expect(parsed?.type).toBe('created');
     expect(parsed?.vaultId).toBe(vaultId);
@@ -30,6 +30,6 @@ describe('Spectra Event Parser', () => {
       topic: [nativeToScVal('other').toXDR('base64')],
       value: nativeToScVal(123).toXDR('base64'),
     };
-    expect(parseSpectraEvent(event)).toBeNull();
+    expect(parseSpectralEvent(event)).toBeNull();
   });
 });

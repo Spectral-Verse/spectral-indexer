@@ -4,7 +4,7 @@ import { prisma } from '../db/prisma';
 import { logger } from '../utils/logger';
 
 /**
- * Core service responsible for managing the Spectra contract indexing lifecycle.
+ * Core service responsible for managing the Spectral Verse contract indexing lifecycle.
  * It coordinates event fetching, processing, and sync state management.
  */
 export class IndexerService {
@@ -22,7 +22,7 @@ export class IndexerService {
   }
 
   /**
-   * Starts the background indexing loop for one or more Spectra contracts.
+   * Starts the background indexing loop for one or more Spectral Verse contracts.
    * 
    * @param network - The network identifier (e.g., 'testnet', 'mainnet').
    * @param contractIds - Array of contract IDs to index events from.

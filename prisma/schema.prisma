@@ -37,7 +37,7 @@ model RawEvent {
   @@index([network, contractId, ledger])
 }
 
-/// Derived state representing a Spectra Vault and its current settings.
+/// Derived state representing a Spectral Verse Vault and its current settings.
 model Vault {
   /// The unique 32-byte hexadecimal ID of the vault from the contract.
   id                    String   @id

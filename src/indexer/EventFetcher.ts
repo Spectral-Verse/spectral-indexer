@@ -5,7 +5,7 @@ import { logger } from '../utils/logger';
  * Service for polling and retrieving contract events from the Soroban RPC.
  * 
  * This class handles the low-level communication with the Stellar network
- * to extract relevant events for the Spectra protocol.
+ * to extract relevant events for the Spectral Verse protocol.
  */
 export class EventFetcher {
   private server: SorobanRpc.Server;

@@ -12,7 +12,7 @@ async function main() {
     logger.info(`Server listening on port ${port}`);
 
     const indexer = new IndexerService(process.env.SOROBAN_RPC_URL!);
-    const contractIds = process.env.SPECTRA_CONTRACT_IDS?.split(',') || [];
+    const contractIds = process.env.SPECTRAL_CONTRACT_IDS?.split(',') || [];
     const network = process.env.NETWORK_NAME || 'testnet';
     const startLedger = Number(process.env.START_LEDGER) || 0;
 

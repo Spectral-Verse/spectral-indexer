@@ -1,9 +1,9 @@
 import { prisma } from '../db/prisma';
-import { parseSpectraEvent } from '../parsers/spectraEvents';
+import { parseSpectralEvent } from '../parsers/spectralEvents';
 import { logger } from '../utils/logger';
 
 /**
- * Logic for processing parsed Spectra contract events and updating the derived database state.
+ * Logic for processing parsed Spectral Verse contract events and updating the derived database state.
  * All updates are performed within Prisma transactions to ensure data consistency.
  */
 export class EventProcessor {
@@ -15,8 +15,8 @@ export class EventProcessor {
    */
   public async processEvents(events: any[], network: string) {
     for (const event of events) {
-      // Parse the raw event into a structured Spectra event model
-      const parsed = parseSpectraEvent(event);
+      // Parse the raw event into a structured Spectral Verse event model
+      const parsed = parseSpectralEvent(event);
       if (!parsed) continue;
 
       logger.info({ type: parsed.type, vaultId: parsed.vaultId }, 'Processing event');

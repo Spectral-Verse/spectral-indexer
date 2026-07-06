@@ -1,7 +1,7 @@
 {
-  "name": "@spectra/indexer",
+  "name": "@spectral/indexer",
   "version": "0.1.0",
-  "description": "Backend indexing service for Spectra Contracts on Stellar Soroban.",
+  "description": "Backend indexing service for Spectral Verse Contracts on Stellar Soroban.",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -22,7 +22,7 @@
     "stellar",
     "soroban",
     "indexer",
-    "spectra",
+    "spectral",
     "blockchain"
   ],
   "author": "Spectra Team",

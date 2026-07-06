@@ -1,6 +1,6 @@
 import { xdr, scValToNative } from '@stellar/stellar-sdk';
 
-export function parseSpectraEvent(event: any) {
+export function parseSpectralEvent(event: any) {
   const topics = event.topic.map((t: string) => scValToNative(xdr.ScVal.fromXDR(t, 'base64')));
   const data = scValToNative(xdr.ScVal.fromXDR(event.value, 'base64'));
 
