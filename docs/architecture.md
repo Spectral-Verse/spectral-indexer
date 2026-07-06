@@ -1,6 +1,6 @@
-# Spectra Indexer Architecture
+# Spectral Indexer Architecture
 
-Spectra Indexer is a backend service designed to read, parse, and persist data from Spectra smart contracts on the Stellar Soroban network.
+Spectral Indexer is a backend service designed to read, parse, and persist data from Spectral Verse smart contracts on the Stellar Soroban network.
 
 ## Components
 

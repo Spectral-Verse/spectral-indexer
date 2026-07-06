@@ -1,10 +1,10 @@
-# Spectra Indexer
+# Spectral Indexer
 
-Spectra Indexer is a robust backend service for indexing and querying activity from [Spectra Contracts](file:///c:/Users/useer/OneDrive/Desktop/Maintainer/SpectraVault/spectra-contracts) on the Stellar Soroban network.
+Spectral Indexer is a robust backend service for indexing and querying activity from [Spectral Verse Contracts](file:///c:/Users/useer/OneDrive/Desktop/Maintainer/Spectral-Verse/spectral-contracts) on the Stellar Soroban network.
 
 ## Features
 
-- **Event Indexing**: Real-time polling and parsing of Spectra contract events.
+- **Event Indexing**: Real-time polling and parsing of Spectral Verse contract events.
 - **Vault Tracking**: Maintains current state for all indexed vaults, including allocations and total shares.
 - **Position Tracking**: Tracks user share balances and historical activity.
 - **REST API**: Exposes queryable endpoints for vaults, positions, and analytics.
@@ -65,6 +65,19 @@ Once the server is running, visit `http://localhost:3000/docs` for the interacti
 ## Security
 
 Please see [SECURITY.md](SECURITY.md) for security policies and disclosure instructions.
+
+## Funding and Drips
+
+This repository is intended to be eligible for [Drips](https://www.drips.network/) funding and participation in [Drips Wave](https://docs.drips.network/wave/) contribution cycles. 
+
+### Maintainer Action Required
+To fully enable Drips funding and repository claiming, maintainers must:
+1. Claim the repository on [Drips App](https://www.drips.network/app)
+2. Configure funding splits (if applicable)
+3. Consider adding a `FUNDING.json` file with approved ownership details (no placeholder addresses should be used)
+4. Review and apply appropriate labels (see `.github/ISSUE_TEMPLATE/` for label suggestions)
+
+For more information, see [docs/drips-readiness.md](docs/drips-readiness.md).
 
 ## License
 
