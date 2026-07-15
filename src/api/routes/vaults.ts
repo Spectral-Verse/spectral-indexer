@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
 import { prisma } from '../../db/prisma';
 
 /**
@@ -13,12 +12,15 @@ export async function vaultRoutes(fastify: FastifyInstance) {
    */
   fastify.get('/', {
     schema: {
-      querystring: z.object({
-        network: z.string().optional(),
-        manager: z.string().optional(),
-        limit: z.coerce.number().default(20),
-        offset: z.coerce.number().default(0),
-      }),
+      querystring: {
+        type: 'object',
+        properties: {
+          network: { type: 'string' },
+          manager: { type: 'string' },
+          limit: { type: 'integer', default: 20 },
+          offset: { type: 'integer', default: 0 },
+        },
+      },
     },
     handler: async (request, reply) => {
       const { network, manager, limit, offset } = request.query as any;

@@ -44,9 +44,7 @@ export class EventFetcher {
             contractIds,
           },
         ],
-        pagination: {
-          limit,
-        },
+        limit,
       });
 
       return response.events;

@@ -1,16 +1,18 @@
 import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
 import { prisma } from '../../db/prisma';
 
 export async function positionRoutes(fastify: FastifyInstance) {
   fastify.get('/', {
     schema: {
-      querystring: z.object({
-        account: z.string().optional(),
-        vaultId: z.string().optional(),
-        limit: z.coerce.number().default(20),
-        offset: z.coerce.number().default(0),
-      }),
+      querystring: {
+        type: 'object',
+        properties: {
+          account: { type: 'string' },
+          vaultId: { type: 'string' },
+          limit: { type: 'integer', default: 20 },
+          offset: { type: 'integer', default: 0 },
+        },
+      },
     },
     handler: async (request, reply) => {
       const { account, vaultId, limit, offset } = request.query as any;
