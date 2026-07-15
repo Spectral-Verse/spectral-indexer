@@ -1,23 +1,24 @@
-import 'dotenv/config';
+import { config } from './config/env';
 import { createServer } from './server';
 import { IndexerService } from './indexer/IndexerService';
 import { logger } from './utils/logger';
 
 async function main() {
-  const port = Number(process.env.PORT) || 3000;
+  const port = config.PORT;
   const server = await createServer();
 
   try {
     await server.listen({ port, host: '0.0.0.0' });
     logger.info(`Server listening on port ${port}`);
 
-    const indexer = new IndexerService(process.env.SOROBAN_RPC_URL!);
-    const contractIds = process.env.SPECTRAL_CONTRACT_IDS?.split(',') || [];
-    const network = process.env.NETWORK_NAME || 'testnet';
-    const startLedger = Number(process.env.START_LEDGER) || 0;
+    const indexer = new IndexerService(
+      config.SOROBAN_RPC_URL,
+      config.POLLING_INTERVAL,
+      config.BATCH_SIZE
+    );
 
     // Start indexer in background
-    indexer.start(network, contractIds, startLedger);
+    indexer.start(config.NETWORK_NAME, config.SPECTRAL_CONTRACT_IDS, config.START_LEDGER);
 
     // Graceful shutdown
     const shutdown = async () => {

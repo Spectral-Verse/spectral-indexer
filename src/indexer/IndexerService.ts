@@ -11,14 +11,20 @@ export class IndexerService {
   private fetcher: EventFetcher;
   private processor: EventProcessor;
   private isRunning: boolean = false;
+  private pollingInterval: number;
+  private batchSize: number;
 
   /**
    * Initializes the indexer service with a connection to a Soroban RPC node.
    * @param rpcUrl - The URL of the Soroban RPC endpoint.
+   * @param pollingInterval - The polling interval in milliseconds (default: 5000).
+   * @param batchSize - The batch size of events to fetch (default: 50).
    */
-  constructor(rpcUrl: string) {
+  constructor(rpcUrl: string, pollingInterval: number = 5000, batchSize: number = 50) {
     this.fetcher = new EventFetcher(rpcUrl);
     this.processor = new EventProcessor();
+    this.pollingInterval = pollingInterval;
+    this.batchSize = batchSize;
   }
 
   /**
@@ -45,7 +51,7 @@ export class IndexerService {
           const currentLedger = syncState?.lastLedger || startLedger;
           
           // Fetch events starting from the next ledger
-          const events = await this.fetcher.fetchEvents([contractId], currentLedger + 1);
+          const events = await this.fetcher.fetchEvents([contractId], currentLedger + 1, this.batchSize);
 
           if (events.length > 0) {
             // Process the batch of events in a single transaction context
@@ -62,7 +68,7 @@ export class IndexerService {
         }
 
         // Wait before the next polling cycle
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, this.pollingInterval));
       } catch (err) {
         logger.error({ err }, 'Indexer loop error');
         // Exponential backoff or constant retry delay on failure
